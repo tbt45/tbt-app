@@ -94,4 +94,4 @@ jobs:
           CI: true
           RAILS_ENV: test
           DATABASE_URL: mysql2://root@127.0.0.1:3306/tbt_app_test
-        run: bin/rails db:test:prepare && bundle exec rspec
+        run: bin/rails tailwindcss:build && bin/rails db:test:prepare && bundle exec rspec

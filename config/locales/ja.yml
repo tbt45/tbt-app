@@ -1,0 +1,64 @@
+ja:
+  app:
+    name: Tbt App
+
+  layout:
+    sign_in: ログイン
+    sign_up: 新規登録
+    sign_out: ログアウト
+
+  home:
+    title: ようこそ
+    signed_in_as: "ログイン中: %{email}"
+    description: 認証が正常に動作しています。ここからアプリの機能を追加していきましょう。
+
+  sessions:
+    new:
+      title: ログイン
+      email_placeholder: メールアドレスを入力
+      password_placeholder: パスワードを入力
+      submit: ログイン
+      forgot_password: パスワードをお忘れですか？
+      no_account: アカウントをお持ちでない方は
+      sign_up: 新規登録
+    create:
+      invalid_credentials: メールアドレスまたはパスワードが正しくありません。
+    rate_limit: しばらく時間をおいて再度お試しください。
+
+  registrations:
+    new:
+      title: 新規登録
+      description: アカウントを作成して始めましょう。
+      email_placeholder: メールアドレスを入力
+      password_placeholder: パスワード（8文字以上）
+      password_confirmation_placeholder: パスワード（確認）
+      submit: アカウントを作成
+      sign_in: ログインはこちら
+      errors_title: 入力内容を確認してください。
+    rate_limit: しばらく時間をおいて再度お試しください。
+
+  passwords:
+    new:
+      title: パスワードをお忘れですか？
+      email_placeholder: メールアドレスを入力
+      submit: リセット手順を送信
+    edit:
+      title: パスワードを更新
+      password_placeholder: 新しいパスワード
+      password_confirmation_placeholder: 新しいパスワード（確認）
+      submit: 保存
+    create:
+      notice: パスワードリセットの手順を送信しました（該当するメールアドレスが登録されている場合）。
+    update:
+      notice: パスワードを更新しました。
+      mismatch: パスワードが一致しません。
+    invalid_token: パスワードリセットのリンクが無効または期限切れです。
+    rate_limit: しばらく時間をおいて再度お試しください。
+
+  mailers:
+    passwords:
+      reset:
+        subject: パスワードのリセット
+        body_intro: 次のページからパスワードをリセットできます。
+        link_text: パスワードリセットページ
+        expires_in: "このリンクの有効期限は %{duration} です。"

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
-    <title><%= content_for(:title) || "Tbt App" %></title>
+    <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Tbt App">
+    <meta name="application-name" content="<%= t("app.name") %>">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -18,12 +18,29 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50 min-h-screen">
+    <header class="bg-white border-b border-gray-200">
+      <nav class="container mx-auto px-5 py-4 flex items-center justify-between">
+        <%= link_to t("app.name"), root_path, class: "font-bold text-xl text-gray-900 hover:text-blue-600" %>
+
+        <div class="flex items-center gap-4 text-sm">
+          <% if authenticated? %>
+            <span class="text-gray-600 hidden sm:inline"><%= Current.user.email_address %></span>
+            <%= button_to t("layout.sign_out"), session_path, method: :delete, class: "rounded-md px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium cursor-pointer" %>
+          <% else %>
+            <%= link_to t("layout.sign_up"), new_registration_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+            <%= link_to t("layout.sign_in"), new_session_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+          <% end %>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mx-auto mt-16 px-5 flex">
+      <%= yield %>
+    </main>
   </body>
 </html>

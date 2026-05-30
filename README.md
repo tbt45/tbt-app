@@ -9,9 +9,25 @@ Rails 8 + Ruby 4 + MySQL + Docker 開発環境
 | Ruby | 4.0.5 |
 | Rails | 8.1 |
 | DB | MySQL 8.4 |
-| フロント | Hotwire (Turbo + Stimulus) |
+| フロント | Hotwire (Turbo + Stimulus) + Tailwind CSS |
+| 認証 | Rails 8 標準 authentication generator |
+| 言語 | 日本語（i18n、デフォルトロケール `ja`） |
 
 Hotwire は Rails 7 以降の標準構成です。SPA フレームワークなしで、Turbo による高速なページ遷移と Stimulus による軽量な JavaScript 拡張が使えます。
+
+## 認証（ログイン）
+
+| 項目 | 値 |
+|------|-----|
+| ログイン URL | http://localhost:3000/session/new |
+| 新規登録 URL | http://localhost:3000/registration/new |
+| デモユーザー | `demo@example.com` |
+| パスワード | `password` |
+
+```bash
+# デモユーザーを再作成
+docker compose exec web bin/rails db:seed
+```
 
 ## 前提条件
 

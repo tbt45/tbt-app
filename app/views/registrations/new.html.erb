@@ -1,0 +1,45 @@
+<div class="mx-auto md:w-2/3 w-full max-w-md">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 px-8 py-10">
+  <% if alert = flash[:alert] %>
+    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+  <% end %>
+
+  <% if @user.errors.any? %>
+    <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg" id="error_explanation">
+      <p class="mb-2"><%= t(".errors_title") %></p>
+      <ul class="list-disc list-inside text-sm">
+        <% @user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+  <p class="text-gray-500 mt-2 mb-6"><%= t(".description") %></p>
+
+  <%= form_with model: @user, url: registration_path, class: "contents" do |form| %>
+    <div class="my-5">
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t(".email_placeholder"), class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    <div class="my-5">
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: t(".password_placeholder"), maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    <div class="my-5">
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: t(".password_confirmation_placeholder"), maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
+      <div class="inline">
+        <%= form.submit t(".submit"), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+      </div>
+
+      <div class="mt-4 text-sm text-gray-500 sm:mt-0">
+        <%= link_to t(".sign_in"), new_session_path, class: "text-gray-700 underline hover:no-underline" %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

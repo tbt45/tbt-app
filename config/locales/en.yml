@@ -1,31 +1,64 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  app:
+    name: Tbt App
+
+  layout:
+    sign_in: Sign in
+    sign_up: Sign up
+    sign_out: Sign out
+
+  home:
+    title: Welcome
+    signed_in_as: "Signed in as %{email}"
+    description: Authentication is working. Build your app features from here.
+
+  sessions:
+    new:
+      title: Sign in
+      email_placeholder: Enter your email address
+      password_placeholder: Enter your password
+      submit: Sign in
+      forgot_password: Forgot password?
+      no_account: Don't have an account?
+      sign_up: Sign up
+    create:
+      invalid_credentials: Try another email address or password.
+    rate_limit: Try again later.
+
+  registrations:
+    new:
+      title: Sign up
+      description: Create your account to get started.
+      email_placeholder: Enter your email address
+      password_placeholder: Password (8 characters minimum)
+      password_confirmation_placeholder: Confirm password
+      submit: Create account
+      sign_in: Sign in instead
+      errors_title: Please fix the following errors.
+    rate_limit: Try again later.
+
+  passwords:
+    new:
+      title: Forgot your password?
+      email_placeholder: Enter your email address
+      submit: Email reset instructions
+    edit:
+      title: Update your password
+      password_placeholder: Enter new password
+      password_confirmation_placeholder: Repeat new password
+      submit: Save
+    create:
+      notice: Password reset instructions sent (if user with that email address exists).
+    update:
+      notice: Password has been reset.
+      mismatch: Passwords did not match.
+    invalid_token: Password reset link is invalid or has expired.
+    rate_limit: Try again later.
+
+  mailers:
+    passwords:
+      reset:
+        subject: Reset your password
+        body_intro: You can reset your password on
+        link_text: this password reset page
+        expires_in: "This link will expire in %{duration}."

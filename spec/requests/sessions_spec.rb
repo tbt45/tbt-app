@@ -38,4 +38,18 @@ RSpec.describe "ログイン", type: :request do
       expect(cookies[:session_id]).to be_blank
     end
   end
+
+  describe "無効なセッション" do
+    it "ユーザーが存在しないセッション Cookie ではログイン画面へリダイレクトする" do
+      session = user.sessions.create!
+      cookies[:session_id] = ActionDispatch::TestRequest.create.cookie_jar.tap { |jar|
+        jar.signed[:session_id] = session.id
+      }[:session_id]
+      user.destroy!
+
+      get root_path
+
+      expect(response).to redirect_to(new_session_path)
+    end
+  end
 end

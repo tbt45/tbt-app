@@ -15,14 +15,20 @@ module Authentication
   private
     def authenticated?
       resume_session
+      Current.user.present?
     end
 
     def require_authentication
-      resume_session || request_authentication
+      resume_session
+      return if Current.user
+
+      invalidate_stale_session
+      request_authentication
     end
 
     def resume_session
-      Current.session ||= find_session_by_cookie
+      session = find_session_by_cookie
+      Current.session = session if session&.user
     end
 
     def find_session_by_cookie
@@ -46,7 +52,12 @@ module Authentication
     end
 
     def terminate_session
-      Current.session.destroy
+      Current.session&.destroy
+      invalidate_stale_session
+    end
+
+    def invalidate_stale_session
       cookies.delete(:session_id)
+      Current.session = nil
     end
 end

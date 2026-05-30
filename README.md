@@ -57,12 +57,33 @@ docker compose exec web bin/rails console
 docker compose exec web bin/rails db:migrate
 
 # テスト実行
-docker compose exec web bin/rails test
+docker compose exec web bundle exec rspec
+
+# 特定ファイル
+docker compose exec web bundle exec rspec spec/requests/sessions_spec.rb
+
+# RuboCop（スタイルチェック）
+docker compose exec web bin/rubocop
+
+# 変更ファイルに対する RuboCop + テスト（品質チェック）
+docker compose exec web bin/quality
+docker compose exec web bin/quality --fix   # RuboCop 自動修正付き
+
+# フル CI（RuboCop + セキュリティスキャン + 全テスト）
+docker compose exec web bin/ci
 
 # 新しい gem を追加した後
 docker compose build web
 docker compose up
 ```
+
+## 品質チェック
+
+| 項目 | 内容 |
+|------|------|
+| テスト | RSpec（request spec）`spec/**/*_spec.rb` |
+| Lint | RuboCop + `rubocop-rails-omakase` |
+| スキル | `/quality-check` — 変更に応じてテスト作成・RuboCop 実行 |
 
 ## MySQL への接続（ホストから）
 

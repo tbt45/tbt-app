@@ -68,3 +68,5 @@ end
 gem "tailwindcss-rails", "~> 4.4"
 
 gem "rails-i18n", "~> 8.1"
+
+gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]

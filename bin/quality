@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run RuboCop and targeted RSpec for changed files.
+# Usage:
+#   bin/quality           # check only
+#   bin/quality --fix     # auto-correct RuboCop offenses
+
+FIX=false
+if [[ "${1:-}" == "--fix" ]]; then
+  FIX=true
+fi
+
+collect_changed_ruby_files() {
+  {
+    git diff --name-only HEAD 2>/dev/null
+    git diff --cached --name-only 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | grep -E '\.(rb|rake)$' | sort -u || true
+}
+
+map_to_spec_files() {
+  local file="$1"
+  local spec_file=""
+
+  case "$file" in
+    app/controllers/*_controller.rb)
+      local resource
+      resource=$(basename "${file/_controller.rb/}")
+      case "$resource" in
+        sessions) spec_file="spec/requests/sessions_spec.rb" ;;
+        registrations) spec_file="spec/requests/registrations_spec.rb" ;;
+        passwords) spec_file="spec/requests/passwords_spec.rb" ;;
+        home) spec_file="spec/requests/home_spec.rb" ;;
+        *) spec_file="spec/requests/${resource}_spec.rb" ;;
+      esac
+      ;;
+    app/models/*.rb)
+      local model
+      model=$(basename "$file" .rb)
+      [[ "$model" == "application_record" || "$model" == "current" ]] && return
+      spec_file="spec/models/${model}_spec.rb"
+      ;;
+    app/mailers/*_mailer.rb)
+      spec_file="spec/mailers/$(basename "${file/_mailer.rb/}_mailer_spec.rb")"
+      ;;
+    spec/**/*_spec.rb)
+      spec_file="$file"
+      ;;
+  esac
+
+  if [[ -n "$spec_file" && -f "$spec_file" ]]; then
+    echo "$spec_file"
+  fi
+}
+
+changed_files=$(collect_changed_ruby_files)
+
+echo "== RuboCop =="
+if [[ -z "$changed_files" ]]; then
+  echo "No changed Ruby files. Running full RuboCop."
+  if $FIX; then
+    bin/rubocop -A
+  else
+    bin/rubocop
+  fi
+else
+  echo "$changed_files" | sed 's/^/  /'
+  if $FIX; then
+    echo "$changed_files" | xargs bin/rubocop -A
+  else
+    echo "$changed_files" | xargs bin/rubocop
+  fi
+fi
+
+echo ""
+echo "== Specs =="
+spec_files=()
+while IFS= read -r file; do
+  [[ -z "$file" ]] && continue
+  mapped=$(map_to_spec_files "$file") || true
+  if [[ -n "${mapped:-}" ]]; then
+    spec_files+=("$mapped")
+  fi
+done <<< "$changed_files"
+
+if [[ ${#spec_files[@]} -eq 0 ]]; then
+  if [[ -z "$changed_files" ]]; then
+    echo "No changed Ruby files. Running full spec suite."
+  else
+    echo "No mapped spec files for changes. Running full spec suite."
+  fi
+  bundle exec rspec
+else
+  unique_specs=$(printf '%s\n' "${spec_files[@]}" | sort -u)
+  echo "$unique_specs" | sed 's/^/  /'
+  echo "$unique_specs" | xargs bundle exec rspec
+fi
+
+echo ""
+echo "Quality check passed."

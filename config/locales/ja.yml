@@ -17,6 +17,7 @@ ja:
       title: ログイン
       email_placeholder: メールアドレスを入力
       password_placeholder: パスワードを入力
+      remember_me: ログイン状態を保持する（90日間）
       submit: ログイン
       forgot_password: パスワードをお忘れですか？
       no_account: アカウントをお持ちでない方は

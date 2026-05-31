@@ -17,6 +17,7 @@ en:
       title: Sign in
       email_placeholder: Enter your email address
       password_placeholder: Enter your password
+      remember_me: Keep me signed in for 90 days
       submit: Sign in
       forgot_password: Forgot password?
       no_account: Don't have an account?

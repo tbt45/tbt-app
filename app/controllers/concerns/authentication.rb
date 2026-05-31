@@ -15,24 +15,35 @@ module Authentication
   private
     def authenticated?
       resume_session
-      Current.user.present?
+      Current.session.present?
     end
 
     def require_authentication
       resume_session
-      return if Current.user
+      return if Current.session
 
       invalidate_stale_session
       request_authentication
     end
 
     def resume_session
-      session = find_session_by_cookie
-      Current.session = session if session&.user
+      Current.session = find_session_by_cookie
     end
 
     def find_session_by_cookie
-      Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+      return unless cookies.signed[:session_id]
+
+      session = Session.find_by(id: cookies.signed[:session_id])
+      return unless session
+
+      unless session.active?
+        session.destroy
+        return
+      end
+
+      session.refresh_expiry!
+      set_session_cookie(session)
+      session
     end
 
     def request_authentication
@@ -45,10 +56,25 @@ module Authentication
     end
 
     def start_new_session_for(user)
-      user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
+      remember_me = ActiveModel::Type::Boolean.new.cast(params.fetch(:remember_me, "1"))
+      user.sessions.create!(
+        user_agent: request.user_agent,
+        ip_address: request.remote_ip,
+        remember_me: remember_me,
+        expires_at: Session.expires_at_for(remember_me: remember_me)
+      ).tap do |session|
         Current.session = session
-        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
+        set_session_cookie(session)
       end
+    end
+
+    def set_session_cookie(session)
+      cookies.signed[:session_id] = {
+        value: session.id,
+        httponly: true,
+        same_site: :lax,
+        expires: session.expires_at
+      }
     end
 
     def terminate_session

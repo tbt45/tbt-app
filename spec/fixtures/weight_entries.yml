@@ -1,0 +1,10 @@
+one_weight_today:
+  user: one
+  recorded_on: <%= Date.current %>
+  weight: 66.5
+  body_fat_percentage: 20.0
+
+one_weight_yesterday:
+  user: one
+  recorded_on: <%= Date.current - 1 %>
+  weight: 66.8

@@ -14,6 +14,10 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  resource :goal, only: %i[ show new create edit update ]
+  resources :goals, only: %i[ index ]
+  resources :weight_entries, except: %i[ show ]
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end

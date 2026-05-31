@@ -1,6 +1,6 @@
 module SessionHelpers
   def sign_in_as(user)
-    session = user.sessions.create!
+    session = user.sessions.create!(remember_me: true, expires_at: Session::REMEMBER_ME_DURATION.from_now)
     Current.session = session
 
     ActionDispatch::TestRequest.create.cookie_jar.tap do |cookie_jar|

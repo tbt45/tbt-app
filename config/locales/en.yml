@@ -8,9 +8,14 @@ en:
     sign_out: Sign out
 
   home:
-    title: Welcome
-    signed_in_as: "Signed in as %{email}"
-    description: Authentication is working. Build your app features from here.
+    index:
+      title: Welcome
+      signed_in_as: "Signed in as %{email}"
+      description: Track your weight and goals to manage your health.
+      goals_title: Goals
+      goals_description: Set target weight and daily calorie goal
+      weight_title: Weight log
+      weight_description: Record daily weight and body fat percentage
 
   sessions:
     new:

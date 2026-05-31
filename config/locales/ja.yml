@@ -19,13 +19,14 @@ ja:
     weight_entries: 体重
 
   home:
-    title: ようこそ
-    signed_in_as: "ログイン中: %{email}"
-    description: 体重と目標を記録して、健康管理を始めましょう。
-    goals_title: 目標管理
-    goals_description: 体重目標と1日のカロリー目標を設定
-    weight_title: 体重記録
-    weight_description: 日々の体重と体脂肪率を記録
+    index:
+      title: ようこそ
+      signed_in_as: "ログイン中: %{email}"
+      description: 体重と目標を記録して、健康管理を始めましょう。
+      goals_title: 目標管理
+      goals_description: 体重目標と1日のカロリー目標を設定
+      weight_title: 体重記録
+      weight_description: 日々の体重と体脂肪率を記録
 
   goals:
     show:

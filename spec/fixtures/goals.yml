@@ -1,0 +1,5 @@
+one_current:
+  user: one
+  effective_on: <%= Date.current - 7 %>
+  target_weight: 65.0
+  daily_calorie_target: 2000

@@ -2,15 +2,144 @@ ja:
   app:
     name: Tbt Healthup
 
+  common:
+    not_set: 未設定
+
+  date:
+    formats:
+      default: "%Y年%m月%d日"
+      long: "%Y年%m月%d日(%a)"
+      short: "%m月%d日"
+
   layout:
     sign_in: ログイン
     sign_up: 新規登録
     sign_out: ログアウト
+    goals: 目標
+    weight_entries: 体重
 
   home:
-    title: ようこそ
-    signed_in_as: "ログイン中: %{email}"
-    description: 認証が正常に動作しています。ここからアプリの機能を追加していきましょう。
+    index:
+      title: ようこそ
+      signed_in_as: "ログイン中: %{email}"
+      description: 体重と目標を記録して、健康管理を始めましょう。
+      goals_title: 目標管理
+      goals_description: 体重目標と1日のカロリー目標を設定
+      weight_title: 体重記録
+      weight_description: 日々の体重と体脂肪率を記録
+
+  goals:
+    show:
+      title: 目標
+      edit: 編集
+      new: 新しい目標
+      history: 履歴
+      effective_on: 目標設定日
+      target_weight: 目標体重
+      daily_calorie_target: 1日の摂取カロリー目標
+      latest_weight: 最新の体重
+      weight_kg: "%{weight}kg"
+      calories_kcal: "%{calories}kcal"
+      not_set: 未設定
+      empty: まだ目標が設定されていません。
+      weight_gap: "目標まで %{gap} kg %{direction}"
+      over: オーバー
+      under: あと
+    index:
+      title: 目標の履歴
+      new: 新しい目標
+      effective_on: 設定日
+      target_weight: 目標体重
+      daily_calorie_target: カロリー目標
+      current: 現在
+      empty: まだ目標がありません。
+      back: 現在の目標へ
+    new:
+      title: 目標を設定
+      submit: 保存
+    edit:
+      title: 目標を編集
+      submit: 保存
+    create:
+      created: 目標を設定しました。
+    update:
+      updated: 目標を更新しました。
+    form:
+      effective_on: 目標設定日
+      target_weight: 目標体重（kg）
+      target_weight_placeholder: "例: 65.0"
+      daily_calorie_target: 1日の摂取カロリー目標（kcal）
+      daily_calorie_target_placeholder: "例: 2000"
+      target_hint: 体重・カロリーのいずれか（または両方）を入力
+      cancel: キャンセル
+      errors_title: 入力内容を確認してください。
+
+  weight_entries:
+    index:
+      title: 体重記録
+      new: 新規記録
+      recorded_on: 記録日
+      weight: 体重
+      body_fat_percentage: 体脂肪率
+      body_fat_percent: "%{value} %"
+      actions: 操作
+      edit: 編集
+      delete: 削除
+      confirm_delete: この記録を削除しますか？
+      empty: まだ体重記録がありません。
+    new:
+      title: 体重を記録
+    edit:
+      title: 体重記録を編集
+    create:
+      created: 体重を記録しました。
+    update:
+      updated: 体重記録を更新しました。
+    destroy:
+      destroyed: 体重記録を削除しました。
+    form:
+      recorded_on: 記録日
+      weight: 体重（kg）
+      weight_placeholder: "例: 65.5"
+      body_fat_percentage: 体脂肪率（%）
+      body_fat_placeholder: "例: 18.5"
+      body_fat_optional: 任意入力
+      submit: 保存
+      cancel: キャンセル
+      errors_title: 入力内容を確認してください。
+
+  activerecord:
+    models:
+      goal: 目標
+      weight_entry: 体重記録
+      user: ユーザー
+    attributes:
+      user:
+        email_address: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+      goal:
+        effective_on: 目標設定日
+        target_weight: 目標体重
+        daily_calorie_target: 1日の摂取カロリー目標
+        user: ユーザー
+      weight_entry:
+        recorded_on: 記録日
+        weight: 体重
+        body_fat_percentage: 体脂肪率
+        user: ユーザー
+    errors:
+      models:
+        goal:
+          attributes:
+            effective_on:
+              taken: はすでに目標が設定されています
+            base:
+              no_target: 目標体重または1日のカロリー目標のいずれかを入力してください
+        weight_entry:
+          attributes:
+            recorded_on:
+              taken: はすでに記録されています
 
   sessions:
     new:

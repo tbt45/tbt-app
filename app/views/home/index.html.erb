@@ -1,9 +1,18 @@
 <div class="mx-auto md:w-2/3 w-full">
   <h1 class="font-bold text-4xl mb-4"><%= t(".title") %></h1>
-  <p class="text-gray-600 mb-6">
+  <p class="text-gray-600 mb-8">
     <%= t(".signed_in_as", email: Current.user.email_address) %>
   </p>
-  <p class="text-gray-500">
-    <%= t(".description") %>
-  </p>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <%= link_to goal_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-300 transition-colors" do %>
+      <h2 class="font-semibold text-lg text-gray-900"><%= t(".goals_title") %></h2>
+      <p class="text-gray-500 text-sm mt-2"><%= t(".goals_description") %></p>
+    <% end %>
+
+    <%= link_to weight_entries_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-300 transition-colors" do %>
+      <h2 class="font-semibold text-lg text-gray-900"><%= t(".weight_title") %></h2>
+      <p class="text-gray-500 text-sm mt-2"><%= t(".weight_description") %></p>
+    <% end %>
+  </div>
 </div>

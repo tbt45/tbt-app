@@ -17,6 +17,13 @@ Rails.application.routes.draw do
   resource :goal, only: %i[ show new create edit update ]
   resources :goals, only: %i[ index ]
   resources :weight_entries, except: %i[ show ]
+  resources :meal_entries, except: %i[ show ] do
+    collection do
+      get :summary
+      post :from_template
+    end
+  end
+  resources :meal_templates, except: %i[ show ]
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"

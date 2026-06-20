@@ -1,0 +1,20 @@
+one_breakfast:
+  user: one
+  recorded_on: <%= Date.current %>
+  name: オートミール
+  calories: 350
+  meal_type: breakfast
+
+one_lunch:
+  user: one
+  recorded_on: <%= Date.current %>
+  name: サラダチキン
+  calories: 450
+  meal_type: lunch
+
+one_yesterday:
+  user: one
+  recorded_on: <%= Date.current - 1 %>
+  name: カレー
+  calories: 800
+  meal_type: dinner

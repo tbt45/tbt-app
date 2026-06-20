@@ -1,0 +1,49 @@
+<div class="mx-auto md:w-2/3 w-full max-w-md">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 px-8 py-10">
+    <% if meal_entry.errors.any? %>
+      <div class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg" id="error_explanation">
+        <p class="mb-2"><%= t("meal_entries.form.errors_title") %></p>
+        <ul class="list-disc list-inside text-sm">
+          <% meal_entry.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <h1 class="font-bold text-4xl mb-6"><%= title %></h1>
+
+    <%= form_with model: meal_entry, class: "contents" do |form| %>
+      <div class="my-5">
+        <%= form.label :recorded_on, t("meal_entries.form.recorded_on"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.date_field :recorded_on, required: true, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :name, t("meal_entries.form.name"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.text_field :name, required: true, placeholder: t("meal_entries.form.name_placeholder"), class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :calories, t("meal_entries.form.calories"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.number_field :calories, required: true, step: 1, min: 1, placeholder: t("meal_entries.form.calories_placeholder"), class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :meal_type, t("meal_entries.form.meal_type"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.select :meal_type,
+              options_for_select(
+                MealEntry::MEAL_TYPES.map { |type| [ t("meal_entries.meal_types.#{type}"), type ] },
+                meal_entry.meal_type
+              ),
+              { include_blank: t("meal_entries.form.meal_type_optional") },
+              class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="flex items-center gap-4 mt-6">
+        <%= form.submit t("meal_entries.form.submit"), class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+        <%= link_to t("meal_entries.form.cancel"), meal_entries_path(date: meal_entry.recorded_on || Date.current), class: "text-gray-700 underline hover:no-underline text-sm" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="mx-auto w-full max-w-2xl">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+    <%= link_to t(".back"), meal_entries_path(date: @date), class: "text-gray-700 underline hover:no-underline text-sm font-medium" %>
+  </div>
+
+  <%= form_with url: summary_meal_entries_path, method: :get, class: "mb-6 flex flex-wrap items-end gap-3" do |form| %>
+    <div>
+      <%= form.label :date, t("meal_entries.index.date"), class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1" %>
+    </div>
+    <%= form.submit t("meal_entries.index.show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer" %>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
+    <div>
+      <h2 class="text-sm text-gray-500 mb-1"><%= t(".daily_title", date: l(@date)) %></h2>
+      <p class="text-3xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @daily_total) %></p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 border-t border-gray-100 pt-6">
+      <div>
+        <h2 class="text-sm text-gray-500 mb-1"><%= t(".weekly_average") %></h2>
+        <p class="text-2xl font-semibold text-gray-900">
+          <% if @weekly_average %>
+            <%= t(".average_kcal", calories: @weekly_average.round) %>
+          <% else %>
+            <%= t("common.not_set") %>
+          <% end %>
+        </p>
+      </div>
+      <div>
+        <h2 class="text-sm text-gray-500 mb-1"><%= t(".monthly_average") %></h2>
+        <p class="text-2xl font-semibold text-gray-900">
+          <% if @monthly_average %>
+            <%= t(".average_kcal", calories: @monthly_average.round) %>
+          <% else %>
+            <%= t("common.not_set") %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+
+    <% if @calorie_target %>
+      <div class="border-t border-gray-100 pt-6">
+        <h2 class="text-sm text-gray-500 mb-1"><%= t(".calorie_target") %></h2>
+        <p class="text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @calorie_target) %></p>
+        <% unless @calorie_gap.nil? %>
+          <p class="text-sm mt-2 <%= @calorie_gap.positive? ? 'text-red-600' : 'text-green-600' %>">
+            <%= t(".calorie_gap", gap: @calorie_gap.abs, direction: @calorie_gap.positive? ? t(".over") : t(".under")) %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+one_oatmeal:
+  user: one
+  name: オートミール
+  calories: 350
+
+one_protein:
+  user: one
+  name: プロテイン
+  calories: 200
+
+two_salad:
+  user: two
+  name: サラダ
+  calories: 300

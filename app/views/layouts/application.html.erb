@@ -32,6 +32,7 @@
             <%= link_to t("layout.goals"), goal_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
             <%= link_to t("layout.weight_entries"), weight_entries_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
             <%= link_to t("layout.meal_entries"), meal_entries_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
+            <%= link_to t("layout.exercise_entries"), exercise_entries_path, class: "text-gray-700 hover:text-blue-600 font-medium" %>
             <span class="text-gray-600 hidden sm:inline"><%= Current.user.email_address %></span>
             <%= button_to t("layout.sign_out"), session_path, method: :delete, class: "rounded-md px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium cursor-pointer" %>
           <% else %>

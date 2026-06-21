@@ -4,7 +4,7 @@
     <%= t(".signed_in_as", email: Current.user.email_address) %>
   </p>
 
-  <div class="grid gap-4 sm:grid-cols-2">
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     <%= link_to goal_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-300 transition-colors" do %>
       <h2 class="font-semibold text-lg text-gray-900"><%= t(".goals_title") %></h2>
       <p class="text-gray-500 text-sm mt-2"><%= t(".goals_description") %></p>
@@ -13,6 +13,11 @@
     <%= link_to weight_entries_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-300 transition-colors" do %>
       <h2 class="font-semibold text-lg text-gray-900"><%= t(".weight_title") %></h2>
       <p class="text-gray-500 text-sm mt-2"><%= t(".weight_description") %></p>
+    <% end %>
+
+    <%= link_to meal_entries_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:border-blue-300 transition-colors" do %>
+      <h2 class="font-semibold text-lg text-gray-900"><%= t(".meals_title") %></h2>
+      <p class="text-gray-500 text-sm mt-2"><%= t(".meals_description") %></p>
     <% end %>
   </div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
   create_table "goals", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "daily_calorie_target"
@@ -20,6 +20,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_160000) do
     t.bigint "user_id", null: false
     t.index ["user_id", "effective_on"], name: "index_goals_on_user_id_and_effective_on", unique: true
     t.index ["user_id"], name: "index_goals_on_user_id"
+  end
+
+  create_table "meal_entries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "calories", null: false
+    t.datetime "created_at", null: false
+    t.string "meal_type"
+    t.string "name", null: false
+    t.date "recorded_on", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "recorded_on"], name: "index_meal_entries_on_user_id_and_recorded_on"
+    t.index ["user_id"], name: "index_meal_entries_on_user_id"
+  end
+
+  create_table "meal_templates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "calories", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "name"], name: "index_meal_templates_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_meal_templates_on_user_id"
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -54,6 +76,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_160000) do
   end
 
   add_foreign_key "goals", "users"
+  add_foreign_key "meal_entries", "users"
+  add_foreign_key "meal_templates", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "weight_entries", "users"
 end

@@ -1,0 +1,92 @@
+<div class="mx-auto w-full max-w-2xl">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
+    <div class="flex flex-wrap gap-2 text-sm">
+      <%= link_to t(".summary"), summary_meal_entries_path(date: @date), class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium" %>
+      <%= link_to t(".templates"), meal_templates_path, class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium" %>
+      <%= link_to t(".new"), new_meal_entry_path(recorded_on: @date), class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+    </div>
+  </div>
+
+  <% if notice = flash[:notice] %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <% if alert = flash[:alert] %>
+    <p class="py-2 px-3 bg-red-50 mb-5 text-red-600 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+  <% end %>
+
+  <%= form_with url: meal_entries_path, method: :get, class: "mb-6 flex flex-wrap items-end gap-3" do |form| %>
+    <div>
+      <%= form.label :date, t(".date"), class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1" %>
+    </div>
+    <%= form.submit t(".show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer" %>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+    <dl class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <dt class="text-sm text-gray-500"><%= t(".daily_total") %></dt>
+        <dd class="text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @daily_total) %></dd>
+      </div>
+      <% if @calorie_target %>
+        <div>
+          <dt class="text-sm text-gray-500"><%= t(".calorie_target") %></dt>
+          <dd class="text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @calorie_target) %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <% if @meal_templates.any? %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="font-semibold text-lg text-gray-900 mb-4"><%= t(".quick_add") %></h2>
+      <div class="flex flex-wrap gap-2">
+        <% @meal_templates.each do |template| %>
+          <%= button_to from_template_meal_entries_path(meal_template_id: template.id, date: @date),
+                method: :post,
+                class: "rounded-md px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-medium cursor-pointer" do %>
+            <%= template.name %> (<%= t("goals.show.calories_kcal", calories: template.calories) %>)
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @meal_entries.any? %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".name") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".meal_type") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".calories") %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".actions") %></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @meal_entries.each do |entry| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= entry.name %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if entry.meal_type.present? %>
+                  <%= t("meal_entries.meal_types.#{entry.meal_type}") %>
+                <% else %>
+                  <%= t("common.not_set") %>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= t("goals.show.calories_kcal", calories: entry.calories) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
+                <%= link_to t(".edit"), edit_meal_entry_path(entry), class: "text-blue-600 hover:text-blue-500" %>
+                <%= button_to t(".delete"), meal_entry_path(entry), method: :delete, form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "inline text-red-600 hover:text-red-500 cursor-pointer" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="text-gray-500 bg-white rounded-xl border border-gray-200 px-6 py-10 text-center"><%= t(".empty") %></p>
+  <% end %>
+</div>

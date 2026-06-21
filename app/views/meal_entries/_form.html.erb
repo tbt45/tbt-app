@@ -25,7 +25,12 @@
       </div>
 
       <div class="my-5">
-        <%= form.label :calories, t("meal_entries.form.calories"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.label :quantity, t("meal_entries.form.quantity"), class: "block text-sm font-medium text-gray-700" %>
+        <%= form.number_field :quantity, required: true, min: 1, step: 1, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :calories, t("meal_entries.form.calories_per_unit"), class: "block text-sm font-medium text-gray-700" %>
         <%= form.number_field :calories, required: true, step: 1, min: 1, placeholder: t("meal_entries.form.calories_placeholder"), class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
       </div>
 

@@ -37,7 +37,7 @@ RSpec.describe User, type: :model do
     it "指定日の合計カロリーを返す" do
       user = users(:one)
 
-      expect(user.meal_calories_on(Date.current)).to eq(800)
+      expect(user.meal_calories_on(Date.current)).to eq(1150)
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
     it "目標カロリーとの差を返す" do
       user = users(:one)
 
-      expect(user.calorie_gap_to_target(Date.current)).to eq(-1200)
+      expect(user.calorie_gap_to_target(Date.current)).to eq(-850)
     end
   end
 end

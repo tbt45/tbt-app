@@ -6,7 +6,6 @@ RSpec.describe "食事記録", type: :request do
   let(:user) { users(:one) }
   let(:other_user) { users(:two) }
   let(:entry) { meal_entries(:one_breakfast) }
-  let(:template) { meal_templates(:one_oatmeal) }
 
   describe "一覧" do
     it "ログイン後に日別一覧を表示できる" do
@@ -15,8 +14,9 @@ RSpec.describe "食事記録", type: :request do
       get meal_entries_path, params: { date: Date.current }
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("800")
+      expect(response.body).to include("1150")
       expect(response.body).to include("オートミール")
+      expect(response.body).to include("700")
     end
 
     it "未ログインではログイン画面へリダイレクトする" do
@@ -33,47 +33,62 @@ RSpec.describe "食事記録", type: :request do
       get summary_meal_entries_path, params: { date: Date.current }
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("800")
+      expect(response.body).to include("1150")
     end
   end
 
   describe "作成" do
-    it "食事記録を作成できる" do
+    it "複数行の食事記録を一括作成できる" do
       sign_in_as(user)
 
       expect {
         post meal_entries_path, params: {
-          meal_entry: { recorded_on: Date.current, name: "味噌汁", calories: 80, meal_type: "dinner" }
+          meal_entry_batch: {
+            recorded_on: Date.current,
+            rows: [
+              { name: "味噌汁", calories: 80, quantity: 1 },
+              { name: "バナナ", calories: 90, quantity: 2 }
+            ]
+          }
         }
-      }.to change(MealEntry, :count).by(1)
+      }.to change(MealEntry, :count).by(2)
 
       expect(response).to redirect_to(meal_entries_path(date: Date.current))
+      follow_redirect!
+      expect(response.body).to include("2件の食事を記録しました")
     end
-  end
 
-  describe "テンプレートから追加" do
-    it "テンプレートから食事記録を作成できる" do
+    it "テンプレート名とカロリーを指定して作成できる" do
       sign_in_as(user)
+      template = meal_templates(:one_oatmeal)
 
-      expect {
-        post from_template_meal_entries_path, params: { meal_template_id: template.id, date: Date.current }
-      }.to change(MealEntry, :count).by(1)
+      post meal_entries_path, params: {
+        meal_entry_batch: {
+          recorded_on: Date.current,
+          rows: [ { name: template.name, calories: template.calories, quantity: 3 } ]
+        }
+      }
 
       created = MealEntry.order(:id).last
       expect(created.name).to eq(template.name)
       expect(created.calories).to eq(template.calories)
-      expect(response).to redirect_to(meal_entries_path(date: Date.current))
+      expect(created.quantity).to eq(3)
+      expect(created.total_calories).to eq(1050)
     end
 
-    it "他ユーザーのテンプレートは使えない" do
+    it "食事名が空の行だけなら作成しない" do
       sign_in_as(user)
-      other_template = meal_templates(:two_salad)
 
       expect {
-        post from_template_meal_entries_path, params: { meal_template_id: other_template.id, date: Date.current }
+        post meal_entries_path, params: {
+          meal_entry_batch: {
+            recorded_on: Date.current,
+            rows: [ { name: "", calories: "", quantity: 1 } ]
+          }
+        }
       }.not_to change(MealEntry, :count)
 
-      expect(response).to have_http_status(:not_found)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
@@ -82,18 +97,19 @@ RSpec.describe "食事記録", type: :request do
       sign_in_as(user)
 
       patch meal_entry_path(entry), params: {
-        meal_entry: { recorded_on: entry.recorded_on, name: "更新後", calories: 400, meal_type: entry.meal_type }
+        meal_entry: { recorded_on: entry.recorded_on, name: "更新後", calories: 400, quantity: 2, meal_type: entry.meal_type }
       }
 
       expect(response).to redirect_to(meal_entries_path(date: entry.recorded_on))
       expect(entry.reload.name).to eq("更新後")
+      expect(entry.quantity).to eq(2)
     end
 
     it "他ユーザーの記録は更新できない" do
       sign_in_as(other_user)
 
       patch meal_entry_path(entry), params: {
-        meal_entry: { recorded_on: entry.recorded_on, name: "不正", calories: 1 }
+        meal_entry: { recorded_on: entry.recorded_on, name: "不正", calories: 1, quantity: 1 }
       }
 
       expect(response).to have_http_status(:not_found)

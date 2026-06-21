@@ -1,11 +1,10 @@
 class MealEntriesController < ApplicationController
   before_action :set_meal_entry, only: %i[ edit update destroy ]
-  before_action :set_date, only: %i[ index summary from_template ]
+  before_action :set_date, only: %i[ index summary ]
 
   def index
     @meal_entries = Current.user.meal_entries.on_date(@date).order(:id)
     @daily_total = Current.user.meal_calories_on(@date)
-    @meal_templates = Current.user.meal_templates.alphabetical
     @calorie_target = Current.user.current_goal&.daily_calorie_target
   end
 
@@ -18,34 +17,32 @@ class MealEntriesController < ApplicationController
   end
 
   def new
-    @meal_entry = Current.user.meal_entries.build(
-      recorded_on: params[:recorded_on]&.to_date || Date.current
-    )
+    @recorded_on = params[:recorded_on]&.to_date || Date.current
+    @meal_templates = Current.user.meal_templates.alphabetical
+    @rows = batch_rows_from_params.presence || [ default_row ]
   end
 
   def create
-    @meal_entry = Current.user.meal_entries.build(meal_entry_params)
+    @recorded_on = batch_params[:recorded_on]&.to_date || Date.current
+    @meal_templates = Current.user.meal_templates.alphabetical
+    @rows = batch_rows_from_params
+    @entries = build_entries_from_rows(@rows)
 
-    if @meal_entry.save
-      redirect_to meal_entries_path(date: @meal_entry.recorded_on), notice: t(".created")
-    else
+    if @entries.empty?
+      flash.now[:alert] = t(".empty")
       render :new, status: :unprocessable_entity
+      return
     end
-  end
 
-  def from_template
-    template = Current.user.meal_templates.find(params[:meal_template_id])
-    @meal_entry = Current.user.meal_entries.build(
-      recorded_on: @date,
-      name: template.name,
-      calories: template.calories
-    )
-
-    if @meal_entry.save
-      redirect_to meal_entries_path(date: @date), notice: t(".from_template")
-    else
-      redirect_to meal_entries_path(date: @date), alert: @meal_entry.errors.full_messages.to_sentence
+    invalid_entries = @entries.reject(&:valid?)
+    if invalid_entries.any?
+      render :new, status: :unprocessable_entity
+      return
     end
+
+    MealEntry.transaction { @entries.each(&:save!) }
+    redirect_to meal_entries_path(date: @recorded_on),
+                notice: t(".created", count: @entries.size)
   end
 
   def edit
@@ -75,6 +72,33 @@ class MealEntriesController < ApplicationController
     end
 
     def meal_entry_params
-      params.require(:meal_entry).permit(:recorded_on, :name, :calories, :meal_type)
+      params.require(:meal_entry).permit(:recorded_on, :name, :calories, :quantity, :meal_type)
+    end
+
+    def batch_params
+      params.fetch(:meal_entry_batch, {}).permit(:recorded_on, rows: [ :name, :calories, :quantity ])
+    end
+
+    def batch_rows_from_params
+      Array(batch_params[:rows]).map do |row|
+        row.to_h.symbolize_keys.slice(:name, :calories, :quantity)
+      end.reject { |row| row[:name].blank? && row[:calories].blank? }
+    end
+
+    def default_row
+      { name: "", calories: "", quantity: 1 }
+    end
+
+    def build_entries_from_rows(rows)
+      rows.filter_map do |row|
+        next if row[:name].blank?
+
+        Current.user.meal_entries.build(
+          recorded_on: @recorded_on,
+          name: row[:name],
+          calories: row[:calories],
+          quantity: row[:quantity].presence || 1
+        )
+      end
     end
 end

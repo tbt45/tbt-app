@@ -126,10 +126,11 @@ ja:
       show_date: 表示
       daily_total: 1日の合計
       calorie_target: 目標カロリー
-      quick_add: テンプレートから追加
       name: 食事名
+      quantity: 個数
       meal_type: 食事区分
       calories: カロリー
+      entry_line: "%{unit} kcal × %{quantity} = %{total} kcal"
       actions: 操作
       edit: 編集
       delete: 削除
@@ -148,11 +149,22 @@ ja:
       under: あと
     new:
       title: 食事を記録
+      meals_heading: 食事
+      name: 食事名
+      name_placeholder: "例: サラダチキン"
+      quantity: 個数
+      calories_per_unit: カロリー（1個あたり）
+      calories_placeholder: "例: 350"
+      add_row: "+ 行を追加"
+      template_hint: 食事名入力でテンプレートを検索できます。リストにない場合は手入力してください。
+      manage_templates: テンプレートを登録
+      submit: 保存
+      row_error: "%{row}行目: %{message}"
     edit:
       title: 食事記録を編集
     create:
-      created: 食事を記録しました。
-      from_template: テンプレートから食事を追加しました。
+      created: "%{count}件の食事を記録しました。"
+      empty: 食事名が入力された行がありません。
     update:
       updated: 食事記録を更新しました。
     destroy:
@@ -161,7 +173,9 @@ ja:
       recorded_on: 記録日
       name: 食事名
       name_placeholder: "例: サラダチキン"
-      calories: カロリー（kcal）
+      quantity: 個数
+      calories: カロリー（1個あたり）
+      calories_per_unit: カロリー（1個あたり）
       calories_placeholder: "例: 350"
       meal_type: 食事区分
       meal_type_optional: 指定なし
@@ -225,7 +239,8 @@ ja:
       meal_entry:
         recorded_on: 記録日
         name: 食事名
-        calories: カロリー
+        calories: カロリー（1個あたり）
+        quantity: 個数
         meal_type: 食事区分
         user: ユーザー
       meal_template:

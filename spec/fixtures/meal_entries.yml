@@ -3,6 +3,7 @@ one_breakfast:
   recorded_on: <%= Date.current %>
   name: オートミール
   calories: 350
+  quantity: 2
   meal_type: breakfast
 
 one_lunch:

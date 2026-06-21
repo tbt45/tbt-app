@@ -20,7 +20,6 @@ Rails.application.routes.draw do
   resources :meal_entries, except: %i[ show ] do
     collection do
       get :summary
-      post :from_template
     end
   end
   resources :meal_templates, except: %i[ show ]

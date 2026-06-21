@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_221012) do
   create_table "goals", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "daily_calorie_target"
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_120100) do
     t.datetime "created_at", null: false
     t.string "meal_type"
     t.string "name", null: false
+    t.integer "quantity", default: 1, null: false
     t.date "recorded_on", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false

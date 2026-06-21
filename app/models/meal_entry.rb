@@ -7,17 +7,23 @@ class MealEntry < ApplicationRecord
   validates :name, presence: true
   validates :calories, presence: true,
             numericality: { only_integer: true, greater_than: 0, less_than: 100_000 }
+  validates :quantity, presence: true,
+            numericality: { only_integer: true, greater_than: 0, less_than: 1000 }
   validates :meal_type, inclusion: { in: MEAL_TYPES, allow_blank: true }
 
   scope :on_date, ->(date) { where(recorded_on: date) }
   scope :latest_first, -> { order(recorded_on: :desc, id: :desc) }
 
+  def total_calories
+    calories * quantity
+  end
+
   def self.daily_total_for(user, date)
-    user.meal_entries.on_date(date).sum(:calories)
+    user.meal_entries.on_date(date).sum(Arel.sql("calories * quantity"))
   end
 
   def self.daily_totals_for(user, from:, to:)
-    user.meal_entries.where(recorded_on: from..to).group(:recorded_on).sum(:calories)
+    user.meal_entries.where(recorded_on: from..to).group(:recorded_on).sum(Arel.sql("calories * quantity"))
   end
 
   def self.average_daily_calories(user, from:, to:)

@@ -26,7 +26,7 @@ class User < ApplicationRecord
   end
 
   def meal_calories_on(date)
-    meal_entries.on_date(date).sum(:calories)
+    meal_entries.on_date(date).sum(Arel.sql("calories * quantity"))
   end
 
   def meal_weekly_average(anchor_date = Date.current)

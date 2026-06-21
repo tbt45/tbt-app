@@ -1,0 +1,19 @@
+one_running:
+  user: one
+  recorded_on: <%= Date.current %>
+  name: ランニング
+  calories_burned: 300
+  duration_minutes: 30
+
+one_walk:
+  user: one
+  recorded_on: <%= Date.current %>
+  name: ウォーキング
+  calories_burned: 150
+
+one_yesterday:
+  user: one
+  recorded_on: <%= Date.current - 1 %>
+  name: 筋トレ
+  calories_burned: 200
+  duration_minutes: 45

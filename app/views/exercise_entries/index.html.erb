@@ -1,0 +1,94 @@
+<div class="mx-auto w-full max-w-2xl">
+  <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between mb-6">
+    <h1 class="font-bold text-2xl sm:text-4xl"><%= t(".title") %></h1>
+    <div class="grid grid-cols-2 gap-2 text-sm sm:flex sm:flex-wrap">
+      <%= link_to t(".templates"), exercise_templates_path, class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-center" %>
+      <%= link_to t(".new"), new_exercise_entry_path(recorded_on: @date), class: "col-span-2 sm:col-span-1 rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-center" %>
+    </div>
+  </div>
+
+  <% if notice = flash[:notice] %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg" id="notice"><%= notice %></p>
+  <% end %>
+
+  <%= form_with url: exercise_entries_path, method: :get, class: "mb-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3" do |form| %>
+    <div class="w-full sm:w-auto">
+      <%= form.label :date, t(".date"), class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1 w-full sm:w-auto" %>
+    </div>
+    <%= form.submit t(".show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer w-full sm:w-auto" %>
+  <% end %>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+    <dl>
+      <dt class="text-sm text-gray-500"><%= t(".daily_total") %></dt>
+      <dd class="text-xl sm:text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @daily_total) %></dd>
+    </dl>
+  </div>
+
+  <% if @exercise_entries.any? %>
+    <div class="md:hidden space-y-3">
+      <% @exercise_entries.each do |entry| %>
+        <article class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+          <h2 class="font-medium text-gray-900 leading-snug mb-3"><%= entry.name %></h2>
+
+          <dl class="grid grid-cols-2 gap-3 text-sm mb-4">
+            <div>
+              <dt class="text-xs text-gray-500"><%= t(".calories_burned") %></dt>
+              <dd class="mt-0.5 font-medium text-gray-900"><%= t("goals.show.calories_kcal", calories: entry.calories_burned) %></dd>
+            </div>
+            <div>
+              <dt class="text-xs text-gray-500"><%= t(".duration_minutes") %></dt>
+              <dd class="mt-0.5 font-medium text-gray-900">
+                <% if entry.duration_minutes %>
+                  <%= t(".duration_value", minutes: entry.duration_minutes) %>
+                <% else %>
+                  <%= t("common.not_set") %>
+                <% end %>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="flex items-center gap-4 text-sm border-t border-gray-100 pt-3">
+            <%= link_to t(".edit"), edit_exercise_entry_path(entry), class: "text-blue-600 hover:text-blue-500 font-medium" %>
+            <%= button_to t(".delete"), exercise_entry_path(entry), method: :delete, form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "text-red-600 hover:text-red-500 cursor-pointer font-medium" %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+
+    <div class="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".name") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".calories_burned") %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".duration_minutes") %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><%= t(".actions") %></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @exercise_entries.each do |entry| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= entry.name %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= t("goals.show.calories_kcal", calories: entry.calories_burned) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if entry.duration_minutes %>
+                  <%= t(".duration_value", minutes: entry.duration_minutes) %>
+                <% else %>
+                  <%= t("common.not_set") %>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
+                <%= link_to t(".edit"), edit_exercise_entry_path(entry), class: "text-blue-600 hover:text-blue-500" %>
+                <%= button_to t(".delete"), exercise_entry_path(entry), method: :delete, form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "inline text-red-600 hover:text-red-500 cursor-pointer" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="text-gray-500 bg-white rounded-xl border border-gray-200 px-4 sm:px-6 py-10 text-center"><%= t(".empty") %></p>
+  <% end %>
+</div>

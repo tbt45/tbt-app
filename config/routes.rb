@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     end
   end
   resources :meal_templates, except: %i[ show ]
+  resources :exercise_entries, except: %i[ show ]
+  resources :exercise_templates, except: %i[ show ]
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"

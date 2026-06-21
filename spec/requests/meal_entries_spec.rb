@@ -76,6 +76,19 @@ RSpec.describe "食事記録", type: :request do
       expect(created.total_calories).to eq(1050)
     end
 
+    it "食事区分を指定して一括作成できる" do
+      sign_in_as(user)
+
+      post meal_entries_path, params: {
+        meal_entry_batch: {
+          recorded_on: Date.current,
+          rows: [ { name: "カレー", calories: 800, quantity: 1, meal_type: "dinner" } ]
+        }
+      }
+
+      expect(MealEntry.order(:id).last.meal_type).to eq("dinner")
+    end
+
     it "食事名が空の行だけなら作成しない" do
       sign_in_as(user)
 

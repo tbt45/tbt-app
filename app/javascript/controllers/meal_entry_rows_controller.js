@@ -25,9 +25,12 @@ export default class extends Controller {
     row.querySelectorAll("input:not([type='hidden'])").forEach((input) => {
       if (input.name.includes("[quantity]")) {
         input.value = 1
-      } else if (input.type !== "hidden") {
+      } else {
         input.value = ""
       }
+    })
+    row.querySelectorAll("select").forEach((select) => {
+      select.selectedIndex = 0
     })
   }
 }

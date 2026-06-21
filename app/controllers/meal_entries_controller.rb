@@ -76,17 +76,17 @@ class MealEntriesController < ApplicationController
     end
 
     def batch_params
-      params.fetch(:meal_entry_batch, {}).permit(:recorded_on, rows: [ :name, :calories, :quantity ])
+      params.fetch(:meal_entry_batch, {}).permit(:recorded_on, rows: [ :name, :calories, :quantity, :meal_type ])
     end
 
     def batch_rows_from_params
       Array(batch_params[:rows]).map do |row|
-        row.to_h.symbolize_keys.slice(:name, :calories, :quantity)
+        row.to_h.symbolize_keys.slice(:name, :calories, :quantity, :meal_type)
       end.reject { |row| row[:name].blank? && row[:calories].blank? }
     end
 
     def default_row
-      { name: "", calories: "", quantity: 1 }
+      { name: "", calories: "", quantity: 1, meal_type: "" }
     end
 
     def build_entries_from_rows(rows)
@@ -97,7 +97,8 @@ class MealEntriesController < ApplicationController
           recorded_on: @recorded_on,
           name: row[:name],
           calories: row[:calories],
-          quantity: row[:quantity].presence || 1
+          quantity: row[:quantity].presence || 1,
+          meal_type: row[:meal_type].presence
         )
       end
     end

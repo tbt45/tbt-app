@@ -1,46 +1,81 @@
 <div class="mx-auto w-full max-w-2xl">
-  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-    <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
-    <div class="flex flex-wrap gap-2 text-sm">
-      <%= link_to t(".summary"), summary_meal_entries_path(date: @date), class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium" %>
-      <%= link_to t(".templates"), meal_templates_path, class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium" %>
-      <%= link_to t(".new"), new_meal_entry_path(recorded_on: @date), class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between mb-6">
+    <h1 class="font-bold text-2xl sm:text-4xl"><%= t(".title") %></h1>
+    <div class="grid grid-cols-2 gap-2 text-sm sm:flex sm:flex-wrap">
+      <%= link_to t(".summary"), summary_meal_entries_path(date: @date), class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-center" %>
+      <%= link_to t(".templates"), meal_templates_path, class: "rounded-md px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-center" %>
+      <%= link_to t(".new"), new_meal_entry_path(recorded_on: @date), class: "col-span-2 sm:col-span-1 rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-center" %>
     </div>
   </div>
 
   <% if notice = flash[:notice] %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg" id="notice"><%= notice %></p>
   <% end %>
 
   <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-600 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+    <p class="py-2 px-3 bg-red-50 mb-5 text-red-600 font-medium rounded-lg" id="alert"><%= alert %></p>
   <% end %>
 
-  <%= form_with url: meal_entries_path, method: :get, class: "mb-6 flex flex-wrap items-end gap-3" do |form| %>
-    <div>
+  <%= form_with url: meal_entries_path, method: :get, class: "mb-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3" do |form| %>
+    <div class="w-full sm:w-auto">
       <%= form.label :date, t(".date"), class: "block text-sm font-medium text-gray-700" %>
-      <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1" %>
+      <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1 w-full sm:w-auto" %>
     </div>
-    <%= form.submit t(".show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer" %>
+    <%= form.submit t(".show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer w-full sm:w-auto" %>
   <% end %>
 
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
     <dl class="grid gap-4 sm:grid-cols-2">
       <div>
         <dt class="text-sm text-gray-500"><%= t(".daily_total") %></dt>
-        <dd class="text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @daily_total) %></dd>
+        <dd class="text-xl sm:text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @daily_total) %></dd>
       </div>
       <% if @calorie_target %>
         <div>
           <dt class="text-sm text-gray-500"><%= t(".calorie_target") %></dt>
-          <dd class="text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @calorie_target) %></dd>
+          <dd class="text-xl sm:text-2xl font-semibold text-gray-900"><%= t("goals.show.calories_kcal", calories: @calorie_target) %></dd>
         </div>
       <% end %>
     </dl>
   </div>
 
   <% if @meal_entries.any? %>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="md:hidden space-y-3">
+      <% @meal_entries.each do |entry| %>
+        <article class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <h2 class="font-medium text-gray-900 leading-snug"><%= entry.name %></h2>
+            <span class="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">
+              <% if entry.meal_type.present? %>
+                <%= t("meal_entries.meal_types.#{entry.meal_type}") %>
+              <% else %>
+                <%= t("common.not_set") %>
+              <% end %>
+            </span>
+          </div>
+
+          <dl class="grid grid-cols-2 gap-3 text-sm mb-4">
+            <div>
+              <dt class="text-xs text-gray-500"><%= t(".quantity") %></dt>
+              <dd class="mt-0.5 font-medium text-gray-900"><%= entry.quantity %></dd>
+            </div>
+            <div>
+              <dt class="text-xs text-gray-500"><%= t(".calories") %></dt>
+              <dd class="mt-0.5 font-medium text-gray-900">
+                <%= t(".entry_line", unit: entry.calories, quantity: entry.quantity, total: entry.total_calories) %>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="flex items-center gap-4 text-sm border-t border-gray-100 pt-3">
+            <%= link_to t(".edit"), edit_meal_entry_path(entry), class: "text-blue-600 hover:text-blue-500 font-medium" %>
+            <%= button_to t(".delete"), meal_entry_path(entry), method: :delete, form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "text-red-600 hover:text-red-500 cursor-pointer font-medium" %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+
+    <div class="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -76,6 +111,6 @@
       </table>
     </div>
   <% else %>
-    <p class="text-gray-500 bg-white rounded-xl border border-gray-200 px-6 py-10 text-center"><%= t(".empty") %></p>
+    <p class="text-gray-500 bg-white rounded-xl border border-gray-200 px-4 sm:px-6 py-10 text-center"><%= t(".empty") %></p>
   <% end %>
 </div>

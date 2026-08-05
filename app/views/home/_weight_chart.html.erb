@@ -5,18 +5,19 @@
     {
       label: t(".weight_series"),
       data: weight_values,
-      borderColor: "#2563eb",
-      backgroundColor: "rgba(37, 99, 235, 0.15)",
-      tension: 0.25,
-      fill: true
+      borderColor: "#111827",
+      backgroundColor: "rgba(17, 24, 39, 0.06)",
+      tension: 0.3,
+      fill: true,
+      pointRadius: 2
     }
   ]
 %>
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-  <h2 class="font-semibold text-lg text-gray-900 mb-4"><%= t(".weight_chart_title") %></h2>
+<section>
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t(".weight_chart_title") %></h2>
   <% if @weight_points.any? %>
-    <%= tag.div class: "h-64",
+    <%= tag.div class: "h-56",
           data: {
             controller: "chart",
             chart_labels_value: weight_labels,
@@ -27,4 +28,4 @@
   <% else %>
     <p class="text-gray-500 text-sm"><%= t(".weight_chart_empty") %></p>
   <% end %>
-</div>
+</section>

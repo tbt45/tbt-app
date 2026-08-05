@@ -1,45 +1,49 @@
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-  <h2 class="text-sm text-gray-500 mb-4"><%= t(".summary_title", date: l(@date)) %></h2>
-
-  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+<section>
+  <dl class="grid gap-8 sm:grid-cols-2">
     <div>
-      <p class="text-sm text-gray-500"><%= t(".latest_weight") %></p>
-      <p class="text-2xl font-semibold text-gray-900 mt-1">
+      <dt class="text-sm text-gray-500"><%= t(".latest_weight") %></dt>
+      <dd class="mt-1 text-3xl font-semibold text-gray-900 tracking-tight">
         <% if @latest_weight %>
           <%= t("goals.show.weight_kg", weight: @latest_weight.weight) %>
         <% else %>
           <%= t("common.not_set") %>
         <% end %>
-      </p>
+      </dd>
       <% if @weight_gap %>
-        <p class="text-sm mt-2 <%= @weight_gap.positive? ? 'text-red-600' : 'text-green-600' %>">
+        <dd class="mt-1 text-sm <%= @weight_gap.positive? ? 'text-red-600' : 'text-green-600' %>">
           <%= t("goals.show.weight_gap", gap: @weight_gap.abs, direction: @weight_gap.positive? ? t("goals.show.over") : t("goals.show.under")) %>
-        </p>
+        </dd>
       <% end %>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500"><%= t(".intake") %></p>
-      <p class="text-2xl font-semibold text-gray-900 mt-1"><%= t("goals.show.calories_kcal", calories: @intake) %></p>
-      <% if @calorie_target %>
-        <p class="text-sm text-gray-500 mt-2"><%= t(".target", calories: @calorie_target) %></p>
-        <% unless @calorie_gap.nil? %>
-          <p class="text-sm mt-1 <%= @calorie_gap.positive? ? 'text-red-600' : 'text-green-600' %>">
-            <%= t("meal_entries.summary.calorie_gap", gap: @calorie_gap.abs, direction: @calorie_gap.positive? ? t("meal_entries.summary.over") : t("meal_entries.summary.under")) %>
-          </p>
+      <dt class="text-sm text-gray-500"><%= t(".intake") %></dt>
+      <dd class="mt-1 text-3xl font-semibold text-gray-900 tracking-tight">
+        <% if @calorie_target %>
+          <%= t(".intake_with_target", intake: @intake, target: @calorie_target) %>
+        <% else %>
+          <%= t("goals.show.calories_kcal", calories: @intake) %>
         <% end %>
+      </dd>
+      <% unless @calorie_gap.nil? %>
+        <dd class="mt-1 text-sm <%= @calorie_gap.positive? ? 'text-red-600' : 'text-green-600' %>">
+          <%= t("meal_entries.summary.calorie_gap", gap: @calorie_gap.abs, direction: @calorie_gap.positive? ? t("meal_entries.summary.over") : t("meal_entries.summary.under")) %>
+        </dd>
       <% end %>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500"><%= t(".burned") %></p>
-      <p class="text-2xl font-semibold text-gray-900 mt-1"><%= t("goals.show.calories_kcal", calories: @burned) %></p>
+      <dt class="text-sm text-gray-500"><%= t(".burned") %></dt>
+      <dd class="mt-1 text-3xl font-semibold text-gray-900 tracking-tight">
+        <%= t("goals.show.calories_kcal", calories: @burned) %>
+      </dd>
     </div>
 
     <div>
-      <p class="text-sm text-gray-500"><%= t(".balance") %></p>
-      <p class="text-2xl font-semibold text-gray-900 mt-1"><%= t("goals.show.calories_kcal", calories: @balance) %></p>
-      <p class="text-sm text-gray-500 mt-2"><%= t(".balance_hint") %></p>
+      <dt class="text-sm text-gray-500"><%= t(".balance") %></dt>
+      <dd class="mt-1 text-3xl font-semibold text-gray-900 tracking-tight">
+        <%= t("goals.show.calories_kcal", calories: @balance) %>
+      </dd>
     </div>
-  </div>
-</div>
+  </dl>
+</section>

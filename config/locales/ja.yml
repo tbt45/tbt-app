@@ -24,42 +24,26 @@ ja:
   home:
     index:
       title: ダッシュボード
-      signed_in_as: "ログイン中: %{email}"
-      date: 表示日
-      show_date: 表示
-      shortcuts: 記録へ移動
-      goals_title: 目標管理
-      goals_description: 体重目標と1日のカロリー目標を設定
-      weight_title: 体重記録
-      weight_description: 日々の体重と体脂肪率を記録
-      meals_title: カロリー記録
-      meals_description: 食事とカロリーを記録し、日次・週次・月次を確認
-      exercises_title: 運動記録
-      exercises_description: 運動内容と消費カロリーを記録
     summary:
-      summary_title: "%{date} のサマリー"
-      latest_weight: 最新の体重
-      intake: 摂取カロリー
-      burned: 消費カロリー
+      latest_weight: 体重
+      intake: 摂取
+      intake_with_target: "%{intake} / %{target} kcal"
+      burned: 消費
       balance: 収支
-      balance_hint: 摂取 − 消費
-      target: "目標 %{calories} kcal"
     weight_chart:
-      weight_chart_title: 体重推移（30日）
-      weight_chart_empty: この期間の体重記録はまだありません。
+      weight_chart_title: 体重
+      weight_chart_empty: まだ体重記録がありません。
       weight_series: 体重
     calorie_chart:
-      calorie_chart_title: カロリー推移（30日）
-      calorie_chart_empty: この期間のカロリー記録はまだありません。
+      calorie_chart_title: カロリー
+      calorie_chart_empty: まだカロリー記録がありません。
       intake_series: 摂取
       burned_series: 消費
       daily: 日次
       weekly: 週次
     calendar:
-      calendar_title: "%{month} のカレンダー"
       prev_month: 前月
       next_month: 翌月
-      calendar_hint: 記録のある日はハイライト表示されます。日付を選ぶとサマリーが切り替わります。
       weekdays:
         - 日
         - 月

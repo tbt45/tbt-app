@@ -1,57 +1,11 @@
-<div class="mx-auto w-full max-w-5xl space-y-8">
-  <div class="flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <h1 class="font-bold text-4xl"><%= t(".title") %></h1>
-      <p class="text-gray-600 mt-2"><%= t(".signed_in_as", email: Current.user.email_address) %></p>
-    </div>
-
-    <%= form_with url: root_path, method: :get, class: "flex flex-wrap items-end gap-3",
-          data: { turbo_frame: "dashboard" } do |form| %>
-      <div>
-        <%= form.label :date, t(".date"), class: "block text-sm font-medium text-gray-700" %>
-        <%= form.date_field :date, value: @date, class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-1" %>
-      </div>
-      <%= form.hidden_field :month, value: @month.strftime("%Y-%m") %>
-      <%= form.hidden_field :calorie_period, value: @calorie_period %>
-      <%= form.submit t(".show_date"), class: "rounded-md px-3.5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium cursor-pointer" %>
-    <% end %>
-  </div>
-
-  <%= turbo_frame_tag "dashboard" do %>
-    <%= render "summary" %>
-
-    <div class="grid gap-6 lg:grid-cols-2 mt-8">
-      <%= render "weight_chart" %>
-      <%= render "calorie_chart" %>
-    </div>
-
-    <div class="mt-8">
-      <%= render "calendar" %>
-    </div>
-  <% end %>
-
+<%= turbo_frame_tag "dashboard", class: "block mx-auto w-full max-w-3xl space-y-10" do %>
   <div>
-    <h2 class="font-semibold text-lg text-gray-900 mb-4"><%= t(".shortcuts") %></h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <%= link_to goal_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-blue-300 transition-colors" do %>
-        <h3 class="font-semibold text-gray-900"><%= t(".goals_title") %></h3>
-        <p class="text-gray-500 text-sm mt-1"><%= t(".goals_description") %></p>
-      <% end %>
-
-      <%= link_to weight_entries_path, class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-blue-300 transition-colors" do %>
-        <h3 class="font-semibold text-gray-900"><%= t(".weight_title") %></h3>
-        <p class="text-gray-500 text-sm mt-1"><%= t(".weight_description") %></p>
-      <% end %>
-
-      <%= link_to meal_entries_path(date: @date), class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-blue-300 transition-colors" do %>
-        <h3 class="font-semibold text-gray-900"><%= t(".meals_title") %></h3>
-        <p class="text-gray-500 text-sm mt-1"><%= t(".meals_description") %></p>
-      <% end %>
-
-      <%= link_to exercise_entries_path(date: @date), class: "block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-blue-300 transition-colors" do %>
-        <h3 class="font-semibold text-gray-900"><%= t(".exercises_title") %></h3>
-        <p class="text-gray-500 text-sm mt-1"><%= t(".exercises_description") %></p>
-      <% end %>
-    </div>
+    <h1 class="font-bold text-3xl text-gray-900"><%= t(".title") %></h1>
+    <p class="text-gray-500 mt-1"><%= l(@date) %></p>
   </div>
-</div>
+
+  <%= render "summary" %>
+  <%= render "calendar" %>
+  <%= render "weight_chart" %>
+  <%= render "calorie_chart" %>
+<% end %>

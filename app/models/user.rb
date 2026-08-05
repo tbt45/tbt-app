@@ -50,4 +50,19 @@ class User < ApplicationRecord
   def exercise_calories_burned_on(date)
     exercise_entries.on_date(date).sum(:calories_burned)
   end
+
+  def calorie_balance_on(date = Date.current)
+    meal_calories_on(date) - exercise_calories_burned_on(date)
+  end
+
+  def weight_series(from:, to:)
+    weight_entries.where(recorded_on: from..to).order(:recorded_on).pluck(:recorded_on, :weight)
+  end
+
+  def recorded_dates_in(range)
+    meal_dates = meal_entries.where(recorded_on: range).distinct.pluck(:recorded_on)
+    exercise_dates = exercise_entries.where(recorded_on: range).distinct.pluck(:recorded_on)
+    weight_dates = weight_entries.where(recorded_on: range).distinct.pluck(:recorded_on)
+    (meal_dates + exercise_dates + weight_dates).uniq.sort
+  end
 end

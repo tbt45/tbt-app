@@ -1,0 +1,52 @@
+<%
+  first_day = @month.beginning_of_month
+  last_day = @month.end_of_month
+  start_wday = first_day.wday
+  prev_month = (@month - 1.month).beginning_of_month
+  next_month = (@month + 1.month).beginning_of_month
+%>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+  <div class="flex items-center justify-between mb-4">
+    <%= link_to t(".prev_month"),
+          root_path(date: @date, month: prev_month.strftime("%Y-%m"), calorie_period: @calorie_period),
+          data: { turbo_frame: "dashboard" },
+          class: "text-sm text-gray-700 underline hover:no-underline" %>
+    <h2 class="font-semibold text-lg text-gray-900"><%= t(".calendar_title", month: l(@month, format: :month)) %></h2>
+    <%= link_to t(".next_month"),
+          root_path(date: @date, month: next_month.strftime("%Y-%m"), calorie_period: @calorie_period),
+          data: { turbo_frame: "dashboard" },
+          class: "text-sm text-gray-700 underline hover:no-underline" %>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2">
+    <% t(".weekdays").each do |weekday| %>
+      <div class="py-1"><%= weekday %></div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1">
+    <% start_wday.times do %>
+      <div class="aspect-square"></div>
+    <% end %>
+
+    <% (first_day..last_day).each do |day| %>
+      <% has_record = @recorded_dates.include?(day) %>
+      <% selected = day == @date %>
+      <%= link_to root_path(date: day, month: @month.strftime("%Y-%m"), calorie_period: @calorie_period),
+            data: { turbo_frame: "dashboard" },
+            class: [
+              "aspect-square rounded-lg flex flex-col items-center justify-center text-sm transition-colors",
+              selected ? "bg-blue-600 text-white" : "hover:bg-gray-100 text-gray-800",
+              has_record && !selected ? "bg-blue-50 font-semibold" : nil
+            ].compact.join(" ") do %>
+        <span><%= day.day %></span>
+        <% if has_record %>
+          <span class="mt-0.5 h-1.5 w-1.5 rounded-full <%= selected ? 'bg-white' : 'bg-blue-500' %>"></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <p class="text-xs text-gray-500 mt-4"><%= t(".calendar_hint") %></p>
+</div>

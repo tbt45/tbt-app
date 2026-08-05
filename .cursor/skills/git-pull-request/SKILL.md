@@ -56,7 +56,19 @@ EOF
 )"
 ```
 
-6. Return the PR URL to the user.
+6. **Copy labels from the linked issue(s)** (required for feature PRs):
+
+```bash
+# Fetch issue labels, then apply the same ones to the PR
+gh issue view N --json labels --jq '.labels[].name'
+gh pr edit <PR_NUMBER> --add-label "enhancement,phase-N"
+```
+
+- Feature / phase work: copy **all** labels from the linked issue (typically `enhancement` + `phase-1`…`phase-6`).
+- Multiple `Closes #N`: union of those issues' labels.
+- Chore / deps / infra with **no** linked phase issue: skip phase labels (Dependabot labels are fine as-is).
+
+7. Return the PR URL to the user.
 
 Do **not** push to `main` directly or force-push unless the user explicitly asks.
 
@@ -86,16 +98,18 @@ Use `Closes #N` for sub-issues; reference Epic with `Part of #4` if not closing 
 
 ## Phase → issue map
 
-| Phase | Issue | Topic |
-|-------|-------|-------|
-| 1 | #5 | 体重管理 |
-| 1 | #8 | 目標管理 |
-| 2 | #6 | カロリー管理 |
-| 3 | #7 | 運動 |
-| 4 | #9 | ダッシュボード |
-| 5 | #10 | レスポンシブ |
+| Phase | Issue | Topic | PR labels |
+|-------|-------|-------|-----------|
+| 1 | #5 | 体重管理 | `enhancement`, `phase-1` |
+| 1 | #8 | 目標管理 | `enhancement`, `phase-1` |
+| 2 | #6 | カロリー管理 | `enhancement`, `phase-2` |
+| 2 | #21 | 食事個数・テンプレートUI | `enhancement`, `phase-2` |
+| 3 | #7 | 運動 | `enhancement`, `phase-3` |
+| 4 | #9 | ダッシュボード | `enhancement`, `phase-4` |
+| 5 | #10 | レスポンシブ | `enhancement`, `phase-5` |
+| 6 | #24–#26 | アプリ配布 | `enhancement`, `phase-6` |
 
-Fetch latest details with `github-issues` skill when unsure.
+Fetch latest details with `github-issues` skill when unsure. Always prefer the issue's actual labels over this table.
 
 ## Safety (never do)
 

@@ -1,0 +1,16 @@
+one_jogging:
+  user: one
+  name: ジョギング
+  calories_burned: 300
+  duration_minutes: 30
+
+one_yoga:
+  user: one
+  name: ヨガ
+  calories_burned: 120
+
+two_swim:
+  user: two
+  name: 水泳
+  calories_burned: 400
+  duration_minutes: 40

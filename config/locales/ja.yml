@@ -18,6 +18,7 @@ ja:
     goals: 目標
     weight_entries: 体重
     meal_entries: カロリー
+    exercise_entries: 運動
 
   home:
     index:
@@ -30,6 +31,8 @@ ja:
       weight_description: 日々の体重と体脂肪率を記録
       meals_title: カロリー記録
       meals_description: 食事とカロリーを記録し、日次・週次・月次を確認
+      exercises_title: 運動記録
+      exercises_description: 運動内容と消費カロリーを記録
 
   goals:
     show:
@@ -214,12 +217,102 @@ ja:
       cancel: キャンセル
       errors_title: 入力内容を確認してください。
 
+  exercise_entries:
+    index:
+      title: 運動記録
+      new: 運動を追加
+      templates: テンプレート
+      date: 日付
+      show_date: 表示
+      daily_total: 1日の消費カロリー合計
+      name: 運動名
+      calories_burned: 消費カロリー
+      duration_minutes: 時間（分）
+      duration_value: "%{minutes}分"
+      actions: 操作
+      edit: 編集
+      delete: 削除
+      confirm_delete: この運動記録を削除しますか？
+      empty: この日の運動記録はまだありません。
+    new:
+      title: 運動を記録
+      exercises_heading: 運動
+      name: 運動名
+      name_placeholder: "例: ランニング"
+      calories_burned: 消費カロリー（kcal）
+      calories_burned_placeholder: "例: 300"
+      duration_minutes: 時間（分）
+      duration_minutes_placeholder: "例: 30"
+      add_row: "+ 行を追加"
+      template_hint: 運動名入力でテンプレートを検索できます。リストにない場合は手入力してください。
+      manage_templates: テンプレートを登録
+      submit: 保存
+      row_error: "%{row}行目: %{message}"
+    edit:
+      title: 運動記録を編集
+    create:
+      created: "%{count}件の運動を記録しました。"
+      empty: 運動名が入力された行がありません。
+    update:
+      updated: 運動記録を更新しました。
+    destroy:
+      destroyed: 運動記録を削除しました。
+    form:
+      recorded_on: 記録日
+      name: 運動名
+      name_placeholder: "例: ランニング"
+      calories_burned: 消費カロリー（kcal）
+      calories_burned_placeholder: "例: 300"
+      duration_minutes: 時間（分）
+      duration_minutes_placeholder: "例: 30"
+      duration_minutes_optional: 任意
+      submit: 保存
+      cancel: キャンセル
+      errors_title: 入力内容を確認してください。
+
+  exercise_templates:
+    index:
+      title: 運動テンプレート
+      new: 新規テンプレート
+      back: 運動一覧へ
+      name: 名前
+      calories_burned: 消費カロリー
+      duration_minutes: 時間（分）
+      actions: 操作
+      edit: 編集
+      delete: 削除
+      confirm_delete: このテンプレートを削除しますか？
+      empty: まだテンプレートがありません。
+    new:
+      title: テンプレートを作成
+    edit:
+      title: テンプレートを編集
+    create:
+      created: テンプレートを作成しました。
+    update:
+      updated: テンプレートを更新しました。
+    destroy:
+      destroyed: テンプレートを削除しました。
+    form:
+      name: 名前
+      name_placeholder: "例: ジョギング"
+      calories_burned: 消費カロリー（kcal）
+      calories_burned_placeholder: "例: 300"
+      duration_minutes: 時間（分）
+      duration_minutes_placeholder: "例: 30"
+      duration_minutes_optional: 任意
+      submit: 保存
+      cancel: キャンセル
+      errors_title: 入力内容を確認してください。
+
   activerecord:
     models:
       goal: 目標
       weight_entry: 体重記録
       meal_entry: 食事記録
       meal_template: 食事テンプレート
+      exercise_entry: 運動記録
+      exercise_template: 運動テンプレート
       user: ユーザー
     attributes:
       user:
@@ -247,6 +340,17 @@ ja:
         name: 名前
         calories: カロリー
         user: ユーザー
+      exercise_entry:
+        recorded_on: 記録日
+        name: 運動名
+        calories_burned: 消費カロリー
+        duration_minutes: 時間（分）
+        user: ユーザー
+      exercise_template:
+        name: 名前
+        calories_burned: 消費カロリー
+        duration_minutes: 時間（分）
+        user: ユーザー
     errors:
       models:
         goal:
@@ -260,6 +364,10 @@ ja:
             recorded_on:
               taken: はすでに記録されています
         meal_template:
+          attributes:
+            name:
+              taken: はすでに登録されています
+        exercise_template:
           attributes:
             name:
               taken: はすでに登録されています

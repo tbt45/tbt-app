@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :goals, dependent: :destroy
   has_many :meal_entries, dependent: :destroy
   has_many :meal_templates, dependent: :destroy
+  has_many :exercise_entries, dependent: :destroy
+  has_many :exercise_templates, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -43,5 +45,9 @@ class User < ApplicationRecord
     return nil unless current_goal&.daily_calorie_target
 
     meal_calories_on(date) - current_goal.daily_calorie_target
+  end
+
+  def exercise_calories_burned_on(date)
+    exercise_entries.on_date(date).sum(:calories_burned)
   end
 end

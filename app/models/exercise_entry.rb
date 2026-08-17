@@ -15,4 +15,8 @@ class ExerciseEntry < ApplicationRecord
   def self.daily_total_for(user, date)
     user.exercise_entries.on_date(date).sum(:calories_burned)
   end
+
+  def self.daily_totals_for(user, from:, to:)
+    user.exercise_entries.where(recorded_on: from..to).group(:recorded_on).sum(:calories_burned)
+  end
 end

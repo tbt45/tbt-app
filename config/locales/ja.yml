@@ -10,6 +10,7 @@ ja:
       default: "%Y年%m月%d日"
       long: "%Y年%m月%d日(%a)"
       short: "%m月%d日"
+      month: "%Y年%m月"
 
   layout:
     sign_in: ログイン
@@ -22,17 +23,35 @@ ja:
 
   home:
     index:
-      title: ようこそ
-      signed_in_as: "ログイン中: %{email}"
-      description: 体重と目標を記録して、健康管理を始めましょう。
-      goals_title: 目標管理
-      goals_description: 体重目標と1日のカロリー目標を設定
-      weight_title: 体重記録
-      weight_description: 日々の体重と体脂肪率を記録
-      meals_title: カロリー記録
-      meals_description: 食事とカロリーを記録し、日次・週次・月次を確認
-      exercises_title: 運動記録
-      exercises_description: 運動内容と消費カロリーを記録
+      title: ダッシュボード
+    summary:
+      latest_weight: 体重
+      intake: 摂取
+      intake_with_target: "%{intake} / %{target} kcal"
+      burned: 消費
+      balance: 収支
+    weight_chart:
+      weight_chart_title: 体重
+      weight_chart_empty: まだ体重記録がありません。
+      weight_series: 体重
+    calorie_chart:
+      calorie_chart_title: カロリー
+      calorie_chart_empty: まだカロリー記録がありません。
+      intake_series: 摂取
+      burned_series: 消費
+      daily: 日次
+      weekly: 週次
+    calendar:
+      prev_month: 前月
+      next_month: 翌月
+      weekdays:
+        - 日
+        - 月
+        - 火
+        - 水
+        - 木
+        - 金
+        - 土
 
   goals:
     show:

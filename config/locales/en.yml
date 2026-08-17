@@ -9,13 +9,35 @@ en:
 
   home:
     index:
-      title: Welcome
-      signed_in_as: "Signed in as %{email}"
-      description: Track your weight and goals to manage your health.
-      goals_title: Goals
-      goals_description: Set target weight and daily calorie goal
-      weight_title: Weight log
-      weight_description: Record daily weight and body fat percentage
+      title: Dashboard
+    summary:
+      latest_weight: Weight
+      intake: Intake
+      intake_with_target: "%{intake} / %{target} kcal"
+      burned: Burned
+      balance: Balance
+    weight_chart:
+      weight_chart_title: Weight
+      weight_chart_empty: No weight records yet.
+      weight_series: Weight
+    calorie_chart:
+      calorie_chart_title: Calories
+      calorie_chart_empty: No calorie records yet.
+      intake_series: Intake
+      burned_series: Burned
+      daily: Daily
+      weekly: Weekly
+    calendar:
+      prev_month: Prev
+      next_month: Next
+      weekdays:
+        - Sun
+        - Mon
+        - Tue
+        - Wed
+        - Thu
+        - Fri
+        - Sat
 
   sessions:
     new:

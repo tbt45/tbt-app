@@ -1,0 +1,52 @@
+<%
+  first_day = @month.beginning_of_month
+  last_day = @month.end_of_month
+  start_wday = first_day.wday
+  prev_month = (@month - 1.month).beginning_of_month
+  next_month = (@month + 1.month).beginning_of_month
+%>
+
+<section>
+  <div class="flex items-baseline justify-between mb-3">
+    <h2 class="text-lg font-semibold text-gray-900"><%= l(@month, format: :month) %></h2>
+    <div class="flex gap-4 text-sm">
+      <%= link_to t(".prev_month"),
+            root_path(date: @date, month: prev_month.strftime("%Y-%m"), calorie_period: @calorie_period),
+            data: { turbo_frame: "dashboard" },
+            class: "text-gray-500 hover:text-gray-900" %>
+      <%= link_to t(".next_month"),
+            root_path(date: @date, month: next_month.strftime("%Y-%m"), calorie_period: @calorie_period),
+            data: { turbo_frame: "dashboard" },
+            class: "text-gray-500 hover:text-gray-900" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 text-center text-xs text-gray-400 mb-1">
+    <% t(".weekdays").each do |weekday| %>
+      <div class="py-2"><%= weekday %></div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-7">
+    <% start_wday.times do %>
+      <div class="aspect-square"></div>
+    <% end %>
+
+    <% (first_day..last_day).each do |day| %>
+      <% has_record = @recorded_dates.include?(day) %>
+      <% selected = day == @date %>
+      <%= link_to root_path(date: day, month: @month.strftime("%Y-%m"), calorie_period: @calorie_period),
+            data: { turbo_frame: "dashboard" },
+            class: [
+              "aspect-square flex flex-col items-center justify-center text-sm rounded-full",
+              selected ? "bg-gray-900 text-white" : "text-gray-800 hover:bg-gray-100",
+              has_record && !selected ? "font-semibold" : nil
+            ].compact.join(" ") do %>
+        <span><%= day.day %></span>
+        <% if has_record && !selected %>
+          <span class="mt-0.5 h-1 w-1 rounded-full bg-gray-900"></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+<%
+  weight_labels = @weight_points.map { |date, _| l(date, format: :short) }
+  weight_values = @weight_points.map { |_, weight| weight.to_f }
+  weight_datasets = [
+    {
+      label: t(".weight_series"),
+      data: weight_values,
+      borderColor: "#111827",
+      backgroundColor: "rgba(17, 24, 39, 0.06)",
+      tension: 0.3,
+      fill: true,
+      pointRadius: 2
+    }
+  ]
+%>
+
+<section>
+  <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t(".weight_chart_title") %></h2>
+  <% if @weight_points.any? %>
+    <%= tag.div class: "h-56",
+          data: {
+            controller: "chart",
+            chart_labels_value: weight_labels,
+            chart_datasets_value: weight_datasets
+          } do %>
+      <canvas data-chart-target="canvas"></canvas>
+    <% end %>
+  <% else %>
+    <p class="text-gray-500 text-sm"><%= t(".weight_chart_empty") %></p>
+  <% end %>
+</section>

@@ -1,0 +1,51 @@
+<%
+  calorie_datasets = [
+    {
+      label: t(".intake_series"),
+      data: @calorie_chart[:intake],
+      borderColor: "#b91c1c",
+      backgroundColor: "transparent",
+      tension: 0.3,
+      fill: false,
+      pointRadius: 2
+    },
+    {
+      label: t(".burned_series"),
+      data: @calorie_chart[:burned],
+      borderColor: "#15803d",
+      backgroundColor: "transparent",
+      tension: 0.3,
+      fill: false,
+      pointRadius: 2
+    }
+  ]
+%>
+
+<section>
+  <div class="flex items-baseline justify-between gap-3 mb-4">
+    <h2 class="text-lg font-semibold text-gray-900"><%= t(".calorie_chart_title") %></h2>
+    <div class="flex gap-3 text-sm">
+      <%= link_to t(".daily"),
+            root_path(date: @date, month: @month.strftime("%Y-%m"), calorie_period: "daily"),
+            data: { turbo_frame: "dashboard" },
+            class: @calorie_period == "daily" ? "text-gray-900 font-medium" : "text-gray-400 hover:text-gray-700" %>
+      <%= link_to t(".weekly"),
+            root_path(date: @date, month: @month.strftime("%Y-%m"), calorie_period: "weekly"),
+            data: { turbo_frame: "dashboard" },
+            class: @calorie_period == "weekly" ? "text-gray-900 font-medium" : "text-gray-400 hover:text-gray-700" %>
+    </div>
+  </div>
+
+  <% if @calorie_chart[:intake].sum.positive? || @calorie_chart[:burned].sum.positive? %>
+    <%= tag.div class: "h-56",
+          data: {
+            controller: "chart",
+            chart_labels_value: @calorie_chart[:labels],
+            chart_datasets_value: calorie_datasets
+          } do %>
+      <canvas data-chart-target="canvas"></canvas>
+    <% end %>
+  <% else %>
+    <p class="text-gray-500 text-sm"><%= t(".calorie_chart_empty") %></p>
+  <% end %>
+</section>

@@ -70,6 +70,6 @@ gem "tailwindcss-rails", "~> 4.6"
 
 gem "rails-i18n", "~> 8.1"
 
-gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]
+gem "rspec-rails", "~> 8.1", groups: [ :development, :test ]
 
 gem "letter_opener_web", "~> 3.0", group: :development
